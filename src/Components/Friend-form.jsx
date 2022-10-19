@@ -14,10 +14,6 @@ import {
   ListGroupItem,
 } from "reactstrap";
 
-export const friends = [
-  { firstName: "Renaldas", lastName: "Barzdaitis", age: 22, city: "Kaunas" },
-];
-
 export class FriendForm extends Component {
   constructor(props) {
     super(props);
