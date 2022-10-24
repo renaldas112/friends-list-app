@@ -21,28 +21,27 @@ export class FriendForm extends Component {
     this.state = {
       friends: [
         {
-          id: 1,
+          id: "1",
           firstName: "Renaldas",
           lastName: "Barzdaitis",
           age: 22,
           city: "Kaunas",
         },
         {
-          id: 2,
+          id: "2",
           firstName: "Tadas",
           lastName: "Blinda",
           age: 100,
           city: "Lietuva",
         },
         {
-          id: 3,
+          id: "3",
           firstName: "Rytis",
           lastName: "Cicinas",
           age: 69,
           city: "Kazlai",
         },
       ],
-      id: {},
       firstName: "",
       lastName: "",
       age: "",
@@ -59,9 +58,7 @@ export class FriendForm extends Component {
   }
 
   handleAddFriend() {
-    const min = 1;
-    const max = 100;
-    const rand = min + Math.random() * (max - min);
+    const rand = toString(1 + Math.random() * (100 - 1));
     this.setState((prevState) => ({
       friends: [
         ...prevState.friends,
@@ -76,8 +73,14 @@ export class FriendForm extends Component {
     }));
   }
 
-  handleDeleteFriend(id) {
-    this.setState(this.state.friends.filter((friend) => friend.id !== id));
+  handleDeleteFriend(e) {
+    const id = e.target.id;
+    const filteredFriends = this.state.friends.filter((friend) => friend.id !== id);
+
+    this.setState((state) => ({
+      ...state,
+      friends: filteredFriends
+    }))
   }
 
   render() {
@@ -165,9 +168,8 @@ export class FriendForm extends Component {
                 </ListGroup>
                 <Button
                   className="btn btn-danger"
-                  onClick={(id) => {
-                    this.handleDeleteFriend(id);
-                  }}
+                  onClick={this.handleDeleteFriend}
+                  id={friend.id}
                 >
                   Delete Friend
                 </Button>
