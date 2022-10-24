@@ -8,10 +8,7 @@ import {
   FormGroup,
   Label,
   Input,
-  Button,
-  Card,
-  ListGroup,
-  ListGroupItem,
+  Button
 } from "reactstrap";
 
 export class FriendForm extends Component {
