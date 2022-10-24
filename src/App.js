@@ -15,27 +15,69 @@ import {
   ListGroupItem,
 } from "reactstrap";
 
-export const friends = [
-  { firstName: "Renaldas", lastName: "Barzdaitis", age: 22, city: "Kaunas" },
-  { firstName: "Tadas", lastName: "Blinda", age: 100, city: "Lietuva" },
-  { firstName: "Rytis", lastName: "Cicinas", age: 69, city: "Kazlai" },
-];
-
 export class FriendForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      friends: [
+        {
+          id: 1,
+          firstName: "Renaldas",
+          lastName: "Barzdaitis",
+          age: 22,
+          city: "Kaunas",
+        },
+        {
+          id: 2,
+          firstName: "Tadas",
+          lastName: "Blinda",
+          age: 100,
+          city: "Lietuva",
+        },
+        {
+          id: 3,
+          firstName: "Rytis",
+          lastName: "Cicinas",
+          age: 69,
+          city: "Kazlai",
+        },
+      ],
+      id: {},
       firstName: "",
       lastName: "",
       age: "",
       city: "",
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAddFriend = this.handleAddFriend.bind(this);
+    this.handleDeleteFriend = this.handleDeleteFriend.bind(this);
   }
 
   handleInputChange(e) {
     e.preventDefault();
-    this.setState({ firstName: e.target.value });
+    this.setState({ [e.target.id]: e.target.value });
+  }
+
+  handleAddFriend() {
+    const min = 1;
+    const max = 100;
+    const rand = min + Math.random() * (max - min);
+    this.setState((prevState) => ({
+      friends: [
+        ...prevState.friends,
+        { 
+          id: this.state.id + rand,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          age: this.state.age,
+          city: this.state.city,
+        },
+      ],
+    }));
+  }
+
+  handleDeleteFriend(id) {
+    this.setState(this.state.friends.filter((friend) => friend.id !== id));
   }
 
   render() {
@@ -67,6 +109,8 @@ export class FriendForm extends Component {
                     name="lastName"
                     placeholder="Enter friends last name"
                     type="text"
+                    value={this.state.lastName}
+                    onChange={this.handleInputChange}
                     required
                   />
                 </FormGroup>
@@ -80,6 +124,8 @@ export class FriendForm extends Component {
                     type="number"
                     placeholder="Enter friends age"
                     min="1"
+                    value={this.state.age}
+                    onChange={this.handleInputChange}
                     required
                   />
                 </FormGroup>
@@ -91,28 +137,25 @@ export class FriendForm extends Component {
                     id="city"
                     name="city"
                     placeholder="Enter friends city"
+                    value={this.state.city}
+                    onChange={this.handleInputChange}
                     required
                   />
                 </FormGroup>
               </Col>
             </Row>
-            <Button
-              onClick={(e) => {
-                this.handleInputChange(e);
-              }}
-            >
-              Add a friend
-            </Button>
+            <Button onClick={this.handleAddFriend}>Add a friend</Button>
           </Form>
         </Container>
-        <Container className="d-flex">
-          {friends.map((friend) => {
+        <Container className="d-flex flex-wrap">
+          {this.state.friends.map((friend) => {
             return (
               <Card
                 style={{
                   width: "18rem",
                 }}
                 className="m-5"
+                key={friend.id}
               >
                 <ListGroup flush>
                   <ListGroupItem>First Name: {friend.firstName} </ListGroupItem>
@@ -120,6 +163,14 @@ export class FriendForm extends Component {
                   <ListGroupItem>Age: {friend.age}</ListGroupItem>
                   <ListGroupItem>City: {friend.city}</ListGroupItem>
                 </ListGroup>
+                <Button
+                  className="btn btn-danger"
+                  onClick={(id) => {
+                    this.handleDeleteFriend(id);
+                  }}
+                >
+                  Delete Friend
+                </Button>
               </Card>
             );
           })}
@@ -128,6 +179,5 @@ export class FriendForm extends Component {
     );
   }
 }
-
 
 export default FriendForm;
