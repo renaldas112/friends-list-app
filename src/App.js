@@ -19,6 +19,7 @@ export class FriendForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isFormEmpty: null,
       friends: [],
       firstName: "",
       lastName: "",
@@ -40,6 +41,7 @@ export class FriendForm extends Component {
     e.preventDefault();
     const rand = String(Math.floor(1 + Math.random() * (10000 - 1)));
     this.setState((prevState) => ({
+      isFormEmpty: true,
       friends: [
         ...prevState.friends,
         {
@@ -61,6 +63,7 @@ export class FriendForm extends Component {
 
     this.setState((state) => ({
       ...state,
+      isFormEmpty: null,
       friends: filteredFriends,
     }));
   }
@@ -149,33 +152,41 @@ export class FriendForm extends Component {
             </Button>
           </Form>
         </Container>
-        <Container className="d-flex flex-wrap">
-          {this.state.friends.map((friend) => {
-            return (
-              <Card
-                style={{
-                  width: "18rem",
-                }}
-                className="m-5"
-                key={friend.id}
-              >
-                <ListGroup flush>
-                  <ListGroupItem>First Name: {friend.firstName} </ListGroupItem>
-                  <ListGroupItem>Last Name: {friend.lastName} </ListGroupItem>
-                  <ListGroupItem>Age: {friend.age}</ListGroupItem>
-                  <ListGroupItem>City: {friend.city}</ListGroupItem>
-                </ListGroup>
-                <Button
-                  className="btn btn-danger"
-                  onClick={this.handleDeleteFriend}
-                  id={friend.id}
+        {this.state.isFormEmpty ? (
+          <Container className="d-flex flex-wrap">
+            {this.state.friends.map((friend) => {
+              return (
+                <Card
+                  style={{
+                    width: "18rem",
+                  }}
+                  className="m-5"
+                  key={friend.id}
                 >
-                  Delete Friend
-                </Button>
-              </Card>
-            );
-          })}
-        </Container>
+                  <ListGroup flush>
+                    <ListGroupItem>
+                      First Name: {friend.firstName}{" "}
+                    </ListGroupItem>
+                    <ListGroupItem>Last Name: {friend.lastName} </ListGroupItem>
+                    <ListGroupItem>Age: {friend.age}</ListGroupItem>
+                    <ListGroupItem>City: {friend.city}</ListGroupItem>
+                  </ListGroup>
+                  <Button
+                    className="btn btn-danger"
+                    onClick={this.handleDeleteFriend}
+                    id={friend.id}
+                  >
+                    Delete Friend
+                  </Button>
+                </Card>
+              );
+            })}
+          </Container>
+        ) : (
+          <div className="m-5">
+            <h1>No Friends Added</h1>
+          </div>
+        )}
       </>
     );
   }
