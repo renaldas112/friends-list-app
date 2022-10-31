@@ -19,29 +19,7 @@ export class FriendForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: [
-        {
-          id: "1",
-          firstName: "Renaldas",
-          lastName: "Barzdaitis",
-          age: 22,
-          city: "Kaunas",
-        },
-        {
-          id: "2",
-          firstName: "Tadas",
-          lastName: "Blinda",
-          age: 100,
-          city: "Lietuva",
-        },
-        {
-          id: "3",
-          firstName: "Rytis",
-          lastName: "Cicinas",
-          age: 69,
-          city: "Kazlai",
-        },
-      ],
+      friends: [],
       firstName: "",
       lastName: "",
       age: "",
@@ -50,6 +28,7 @@ export class FriendForm extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleAddFriend = this.handleAddFriend.bind(this);
     this.handleDeleteFriend = this.handleDeleteFriend.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInputChange(e) {
@@ -57,12 +36,13 @@ export class FriendForm extends Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  handleAddFriend() {
-    const rand = toString(1 + Math.random() * (100 - 1));
+  handleAddFriend(e) {
+    e.preventDefault();
+    const rand = String(Math.floor(1 + Math.random() * (10000 - 1)));
     this.setState((prevState) => ({
       friends: [
         ...prevState.friends,
-        { 
+        {
           id: this.state.id + rand,
           firstName: this.state.firstName,
           lastName: this.state.lastName,
@@ -75,13 +55,24 @@ export class FriendForm extends Component {
 
   handleDeleteFriend(e) {
     const id = e.target.id;
-    const filteredFriends = this.state.friends.filter((friend) => friend.id !== id);
+    const filteredFriends = this.state.friends.filter(
+      (friend) => friend.id !== id
+    );
 
     this.setState((state) => ({
       ...state,
-      friends: filteredFriends
-    }))
+      friends: filteredFriends,
+    }));
   }
+
+  handleSubmit = (e) => {
+    this.setState({
+      firstName: "",
+      lastName: "",
+      age: "",
+      city: "",
+    });
+  };
 
   render() {
     return (
@@ -147,7 +138,15 @@ export class FriendForm extends Component {
                 </FormGroup>
               </Col>
             </Row>
-            <Button onClick={this.handleAddFriend}>Add a friend</Button>
+            <Button
+              type="submit"
+              onClick={(e) => {
+                this.handleAddFriend(e);
+                this.handleSubmit();
+              }}
+            >
+              Add a friend
+            </Button>
           </Form>
         </Container>
         <Container className="d-flex flex-wrap">
